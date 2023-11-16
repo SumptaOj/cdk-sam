@@ -14,7 +14,8 @@ jobs:
             
             - name: Check tag repository
               run: |
-                echo "PR was checkout Hurray"
+                echo "PR was checked out, Hurray"
                 PACKAGE_VERSION=$(jq -r .version package.json)
-                echo "PACKAGE_VERSION=${PACKAGE_VERSION}" >> $GITHUB_ENV
+                echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
                 git tag $PACKAGE_VERSION
+                git push origin $PACKAGE_VERSION
