@@ -2,6 +2,8 @@ name: git tag release
 
 on:
     workflow_dispatch:
+        branches:
+            main
 
 jobs:
     release:
