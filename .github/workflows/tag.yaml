@@ -24,6 +24,7 @@ jobs:
               
             - name: Create tag
               run: |
+                PACKAGE_VERSION=$(jq -r .version package.json)
                 echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
                 git tag $PACKAGE_VERSION
                 git push origin $PACKAGE_VERSION
