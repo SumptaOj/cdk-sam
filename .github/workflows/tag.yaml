@@ -9,23 +9,20 @@ jobs:
         steps:
             - name: Check out repository code
               uses: actions/checkout@v3
-            
-            - name: Check tag repository
-              run: |
-                echo "PR was checked out, Hurray"
-                PACKAGE_VERSION=$(jq -r .version package.json)
-                echo "PACKAGE_VERSION=${PACKAGE_VERSION}" # Add this line for debugging
 
-            - name: Approve tag creation
-              uses: trstringer/manual-approval@v1
-              with:
-                secret: ${{ github.TOKEN }}
-                approvers: SumptaOj
-              
+            - name: Request release note input
+              id: get_release_note
+              run: |
+                echo "Please enter the release note:"
+                read -r RELEASE_NOTE
+                echo "::set-output name=release_note::${RELEASE_NOTE}"
+                
             - name: Create tag
               run: |
                 PACKAGE_VERSION=$(jq -r .version package.json)
                 echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
-                git tag $PACKAGE_VERSION
+                git commit -am "Package version is v${ PACKAGE_VERSION }"
+                git tag $PACKAGE_VERSION -m "${ steps.get_release_note.outputs.release_note }"
                 git push origin $PACKAGE_VERSION
+               
                
