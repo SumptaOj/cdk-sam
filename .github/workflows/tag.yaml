@@ -17,5 +17,10 @@ jobs:
                 echo "PR was checked out, Hurray"
                 PACKAGE_VERSION=$(jq -r .version package.json)
                 echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
-                git tag $PACKAGE_VERSION
-                git push origin $PACKAGE_VERSION
+                read -p "Proceed with tagging version $PACKAGE_VERSION? (y/n): " confirmation
+                if [ "$confirmation" == "y" ]; then
+                  git tag $PACKAGE_VERSION
+                  git push origin $PACKAGE_VERSION
+                else
+                  echo "Tagging process aborted."
+                fi
