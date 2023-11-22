@@ -14,6 +14,7 @@ jobs:
               run: |
                 echo "PR was checked out, Hurray"
                 PACKAGE_VERSION=$(jq -r .version package.json)
+                echo "PACKAGE_VERSION=${PACKAGE_VERSION}" # Add this line for debugging
 
             - name: Approve tag creation
               uses: trstringer/manual-approval@v1
