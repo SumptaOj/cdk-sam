@@ -16,13 +16,38 @@ jobs:
                 echo "Please enter the release note:"
                 read -r RELEASE_NOTE
                 echo "::set-output name=release_note::${RELEASE_NOTE}"
-                
+
+            - name: Request approval
+              id: request_approval
+              run: |
+                echo "::set-output name=approval::${{ github.event.before }}..${{ github.sha }}"
+        
+                curl -X POST \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  "https://api.github.com/repos/${{ github.repository }}/notifications" \
+                  -d '{"subject": "Approval requested for tagging", "subscription_id": '"$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/users/SumptaOj/subscriptions/${{ github.repository.id }}" | jq -r '.id')"'}'
+
+            - name: Wait for approval
+              if: success()
+              uses: tzkhan/wait-for-approval@v1
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                approval: ${{ github.event.before }}..${{ github.sha }}
+                poll-interval: 10
+
             - name: Create tag
               run: |
                 PACKAGE_VERSION=$(jq -r .version package.json)
                 echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
-                git commit -am "Package version is v${ PACKAGE_VERSION }"
-                git tag $PACKAGE_VERSION -m "${ steps.get_release_note.outputs.release_note }"
+                git tag $PACKAGE_VERSION
                 git push origin $PACKAGE_VERSION
-               
-               
+
+            - name: Create tag
+              if: success() && steps.wait_for_approval.outputs.approved == 'true'
+              run: |
+                PACKAGE_VERSION=$(jq -r .version package.json)
+                echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
+                git commit -am "Package version is v${ PACKAGE_VERSION }"
+                git tag -a "v${ PACKAGE_VERSION }" -m "${{ steps.get_release_note.outputs.release_note }}"
+                git push origin main --follow-tags
