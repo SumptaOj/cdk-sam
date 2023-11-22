@@ -2,8 +2,6 @@ name: git tag release
 
 on:
     workflow_dispatch:
-        branches:
-            main
 
 jobs:
     release:
@@ -16,11 +14,16 @@ jobs:
               run: |
                 echo "PR was checked out, Hurray"
                 PACKAGE_VERSION=$(jq -r .version package.json)
+
+            - name: Approve tag creation
+              uses: trstringer/manual-approval@v1
+              with:
+                secret: ${{ github.TOKEN }}
+                approvers: SumptaOj
+              
+            - name: Create tag
+              run: |
                 echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
-                read -p "Proceed with tagging version $PACKAGE_VERSION? (y/n): " confirmation
-                if [ "$confirmation" == "y" ]; then
-                  git tag $PACKAGE_VERSION
-                  git push origin $PACKAGE_VERSION
-                else
-                  echo "Tagging process aborted."
-                fi
+                git tag $PACKAGE_VERSION
+                git push origin $PACKAGE_VERSION
+               
