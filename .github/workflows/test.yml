@@ -1,0 +1,5 @@
+{"tag_name":$PACKAGE_VERSION,"target_commitish":"main","name":$PACKAGE_VERSION,"body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}
+{"tag_name":"v1.0.0","target_commitish":"master","name":"v1.0.0","body":"Description of the release","draft":false,"prerelease":false,"generate_release_notes":false}
+
+- v1.0.0 -> 0.3.3
+
