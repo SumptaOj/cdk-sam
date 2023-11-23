@@ -20,11 +20,9 @@ jobs:
               id: extract
               run: |
                PACKAGE_VERSION=$(jq -r .version package.json)
-               echo "PACKAGE_VERSION=${PACKAGE_VERSION}"
+               echo "PACKAGE_VERSION=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
 
-              
             - name: Create tag
-              id: git-push
               run: |
                 PACKAGE_VERSION=${{ steps.extract.outputs.PACKAGE_VERSION }}
                 git tag $PACKAGE_VERSION
