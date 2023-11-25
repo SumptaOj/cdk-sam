@@ -3,6 +3,13 @@ name: Git Tag Release
 on:
   workflow_dispatch:
 
+
+##
+## 1. Creating a custom script, which creates an issue and then long-polling/websocketing to get the answer from the issue via GitHub APIs. 
+## 2. Using Github Action from marketplace - there is only one and it's not approved one.
+## 3. (We are using) Github has released the environment feature for the github action workflows. That has the natively support for reviewers (up to 6 people) By watching + changing gh actions notifications to allowed, they can get notifications.
+##
+
 jobs:
     tag_and_release:
         runs-on: ubuntu-latest
