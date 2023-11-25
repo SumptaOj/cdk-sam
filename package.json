@@ -1,6 +1,6 @@
 {
   "name": "cdk-sam-example",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "bin": {
     "cdk-sam-example": "bin/cdk-sam-example.js"
   },
@@ -8,7 +8,10 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "bump-patch": "standard-version --release-as patch --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\"",
+    "bump-minor": "standard-version --release-as minor --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\"",
+    "bump-major": "standard-version --release-as major --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\""
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
