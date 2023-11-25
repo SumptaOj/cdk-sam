@@ -5,8 +5,8 @@ on:
     inputs:
       bump:
         description: 'Bump version. Possible values patch, minor, or major'
-        default: patch
-        required: false
+        #default: patch
+        #required: false
         type: string
 
 
