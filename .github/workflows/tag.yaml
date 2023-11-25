@@ -24,10 +24,7 @@ jobs:
 
             - name: Get The Current Tag
               id: current
-              run: |
-                GITHUB_OUTPUT="output.txt"  # Example filename or variable definition
-                echo "GIT_TAG=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
-              #  echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_OUTPUT
+              run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_OUTPUT
 
             - name: Create tag
               run: |
