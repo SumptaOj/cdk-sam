@@ -20,6 +20,9 @@ jobs:
   bump:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
       - if: ${{ inputs.bump }} == "patch"
         name: Patch Bump
         run: yarn run bump-minor
