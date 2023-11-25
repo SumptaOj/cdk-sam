@@ -6,15 +6,10 @@ on:
 jobs:
     tag_and_release:
         runs-on: ubuntu-latest
+        environment: prod
         steps:
             - name: Check out repository code
               uses: actions/checkout@v3
-
-            - name: Approve tag creation
-              uses: trstringer/manual-approval@v1
-              with: 
-                secret: ${{ github.TOKEN }}
-                approvers: SumptaOj
 
             - name: Extract Package Version
               id: extract
