@@ -25,8 +25,8 @@ jobs:
           echo 'ewogICJjb21taXRpemVuIjogewogICAgIm5hbWUiOiAiY3pfY29udmVudGlvbmFsX2NvbW1pdHMiLAogICAgInRhZ19mb3JtYXQiOiAiJHZlcnNpb24iLAogICAgInZlcnNpb25fc2NoZW1lIjogInNlbXZlciIsCiAgICAidmVyc2lvbl9wcm92aWRlciI6ICJucG0iCiAgfQp9' | base64 -d > .cz.json
       - name: bump the repository and tag it
         run: |
-          git config --global user.email "bot@gmail.com"
-          git config --global user.name "Tobi"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           cz bump --yes
       - name: generate the changelog
         run: cz changelog
