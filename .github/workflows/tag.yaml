@@ -56,5 +56,7 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           PREVIOUS_TAG=$(git describe --abbrev=0 --tags)
+          git tag -a "${PACKAGE_VERSION}" -m "Release ${PACKAGE_VERSION}" "${PREVIOUS_TAG}"
           git push origin main
+          git push origin "${PACKAGE_VERSION}"
           git push origin "${PREVIOUS_TAG}:$PACKAGE_VERSION
