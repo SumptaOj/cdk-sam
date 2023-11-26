@@ -34,8 +34,9 @@ jobs:
         run: rm .cz.json
       - name: commit change log
         run: |
+          PACKAGE_VERSION=$(jq -r .version package.json)
           git add .
-          git commit -m "changelog for feature release"
+          git commit -m "Updated change log and bumped version to ${PACKAGE_VERSION}"
       - name: push the generated tag
         run: |
           PACKAGE_VERSION=$(jq -r .version package.json)
