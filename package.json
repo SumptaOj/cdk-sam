@@ -8,10 +8,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk",
-    "bump-patch": "standard-version --release-as patch --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\"",
-    "bump-minor": "standard-version --release-as minor --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\"",
-    "bump-major": "standard-version --release-as major --skip.tag --skip.changelog --releaseCommitMessageFormat=\"chore: version bump to {{currentTag}}\""
+    "cdk": "cdk"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
