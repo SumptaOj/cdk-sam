@@ -4,6 +4,7 @@ jobs:
   bump_and_tag:
     name: bump repo version
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Check out code from branch
         uses: actions/checkout@v3
