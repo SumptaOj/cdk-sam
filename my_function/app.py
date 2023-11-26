@@ -1,2 +1,2 @@
 def lambda_handler(event, context):
-    return "Hello AWS CDK!"
+    return "Hello AWS"
