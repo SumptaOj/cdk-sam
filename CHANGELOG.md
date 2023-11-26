@@ -1,3 +1,15 @@
+## 3.0.0 (2023-11-26)
+
+### Feat
+
+- this is a breaking chnage
+
+### Fix
+
+- enviro
+- enviro
+- automate
+
 ## 2.2.0 (2023-11-26)
 
 ### Feat
