@@ -40,5 +40,5 @@ jobs:
           PACKAGE_VERSION=$(jq -r .version package.json)
           git config --global user.email "bot@gmail.com"
           git config --global user.name "Tobi"
-          git push origin tagging-branch
+          git push origin main
           git push origin $PACKAGE_VERSION
