@@ -34,14 +34,14 @@ jobs:
                 release_notes=$(git log --pretty=format:"%s%n%b" $previous_tag..HEAD)
                 echo "release_notes=$release_notes" >> $GITHUB_OUTPUT
   
-            - name: Create release
-              uses: actions/create-release@v1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                tag_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
-                release_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
-                body: ${{ steps.release_notes.outputs.release_notes }}
+            # - name: Create release
+            #   uses: actions/create-release@v1
+            #   env:
+            #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   with:
+            #     tag_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
+            #     release_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
+            #     body: ${{ steps.release_notes.outputs.release_notes }}
         
         
         
