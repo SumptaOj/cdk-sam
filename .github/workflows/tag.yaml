@@ -1,55 +1,42 @@
-name: Bump Tag Release
-
-on: 
-  workflow_dispatch:
-
+name: Bump and Tag
+on: [push]
 jobs:
   bump_and_tag:
     name: bump repo version
     runs-on: ubuntu-latest
-    environment: dev
-
     steps:
       - name: Check out code from branch
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
       - name: Install pip
         run: |
           python -m ensurepip --default-pip
           python -m pip install --upgrade pip
-
       - name: Install Commitizen
         run: pip install -U commitizen
-
       - name: Create and Write cz.json
         run: |
-          echo 'ewogICJjb21taXRpemVuIjogewogICAgIm5hbWUiOiAiY3pfY29udmVudGlvbmFsX2NvbW1pdHMiLAogICAgInRhZ19mb3JtYXQiOiAiJHZlcnNpb24iLAogICAgInZlcnNpb25fc2NoZW1lIjogInNlbXZlciIsCiAgICAidmVyc2lvbl9wcm92aWRlciI6ICJucG0iCiAgfQp9' | base64 -d > .cz.json
-
+          CZ_JSON='{"commitizen":{"name":"cz_conventional_commits","tag_format":"$version","version_scheme":"semver","version_provider":"npm"}}'
+          echo ${CZ_JSON} > .cz.json
       - name: bump the repository and tag it
         run: |
-          git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
           cz bump --yes
-
       - name: generate the changelog
         run: cz changelog
-
       - name: remove cz config
         run: rm .cz.json
-
       - name: commit change log
         run: |
           PACKAGE_VERSION=$(jq -r .version package.json)
           git add .
           git commit -m "Updated change log and bumped version to ${PACKAGE_VERSION}"
-
       - name: push the generated tag
         run: |
           PACKAGE_VERSION=$(jq -r .version package.json)
