@@ -35,10 +35,13 @@ jobs:
             - name: Generate release notes
               id: release_notes
               run: |
-                previous_tag=$(git describe --abbrev=0 --tags $(git describe --tags --abbrev=0))
+                previous_tag=${{ steps.current.outputs.GIT_TAG }}
                 release_notes=$(git log --pretty=format:"%s%n%b" $previous_tag..HEAD)
-                echo "::set-output name=release_notes::$release_notes"
-                echo "::set-output name=release_notes::$previous_tag" 
+                echo "release_notes=$release_notes" >> $GITHUB_OUTPUT
+
+            #run: echo "{name}={value}" >> $GITHUB_OUTPUT
+
+            #run: echo "::set-output name={name}::{value}"
           
             - name: Create release
               uses: actions/create-release@v1
