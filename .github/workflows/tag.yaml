@@ -40,7 +40,7 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 tag_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
-                release_name: Release ${{ github.ref }}
+                release_name: ${{ steps.extract.outputs.PACKAGE_VERSION }}
                 body: ${{ steps.release_notes.outputs.release_notes }}
         
         
