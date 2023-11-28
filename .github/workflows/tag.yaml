@@ -1,46 +1,55 @@
-name: Bump and Tag
-on: [push]
+name: Git Tag Release
+
+on:
+  workflow_dispatch:
+
 jobs:
-  bump_and_tag:
-    name: bump repo version
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code from branch
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install pip
-        run: |
-          python -m ensurepip --default-pip
-          python -m pip install --upgrade pip
-      - name: Install Commitizen
-        run: pip install -U commitizen
-      - name: Create and Write cz.json
-        run: |
-          CZ_JSON='{"commitizen":{"name":"cz_conventional_commits","tag_format":"$version","version_scheme":"semver","version_provider":"npm"}}'
-          echo ${CZ_JSON} > .cz.json
-      - name: bump the repository and tag it
-        run: |
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git config --global user.name "${GITHUB_ACTOR}"
-          cz bump --yes
-      - name: generate the changelog
-        run: cz changelog
-      - name: remove cz config
-        run: rm .cz.json
-      - name: commit change log
-        run: |
-          PACKAGE_VERSION=$(jq -r .version package.json)
-          git add .
-          git commit -m "Updated change log and bumped version to ${PACKAGE_VERSION}"
-      - name: push the generated tag
-        run: |
-          PACKAGE_VERSION=$(jq -r .version package.json)
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git push origin main
-          git push origin $PACKAGE_VERSION
+    tag_and_release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v3
+
+            - name: Approve tag creation
+              uses: trstringer/manual-approval@v1
+              with: 
+                secret: ${{ github.TOKEN }}
+                approvers: SumptaOj
+
+            - name: Extract Package Version
+              id: extract
+              run: |
+               PACKAGE_VERSION=$(jq -r .version package.json)
+               echo "PACKAGE_VERSION=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+
+            - name: Get The Current Tag
+              id: current
+              run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_OUTPUT
+
+            - name: Create tag
+              run: |
+                PACKAGE_VERSION=${{ steps.extract.outputs.PACKAGE_VERSION }}
+                git tag $PACKAGE_VERSION
+                git push origin $PACKAGE_VERSION
+
+            - name: Generate release notes
+              id: release_notes
+              run: |
+                previous_tag=$(git describe --abbrev=0 --tags $(git describe --tags --abbrev=0)^)
+                release_notes=$(git log --pretty=format:"%s%n%b" $previous_tag..HEAD)
+                echo "::set-output name=release_notes::$release_notes"     
+          
+            - name: Create release
+              uses: actions/create-release@v1
+              with:
+                tag_name: ${{ github.ref }}
+                release_name: Release ${{ github.ref }}
+                body: ${{ steps.release_notes.outputs.release_notes }}
+        
+        
+        
+        
+
+          
+              
+  
