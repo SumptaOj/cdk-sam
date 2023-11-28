@@ -6,15 +6,10 @@ on:
 jobs:
     tag_and_release:
         runs-on: ubuntu-latest
+        environment: dev
         steps:
             - name: Check out repository code
               uses: actions/checkout@v3
-
-            - name: Approve tag creation
-              uses: trstringer/manual-approval@v1
-              with: 
-                secret: ${{ github.TOKEN }}
-                approvers: SumptaOj
 
             - name: Extract Package Version
               id: extract
@@ -38,11 +33,7 @@ jobs:
                 previous_tag=${{ steps.current.outputs.GIT_TAG }}
                 release_notes=$(git log --pretty=format:"%s%n%b" $previous_tag..HEAD)
                 echo "release_notes=$release_notes" >> $GITHUB_OUTPUT
-
-            #run: echo "{name}={value}" >> $GITHUB_OUTPUT
-
-            #run: echo "::set-output name={name}::{value}"
-          
+  
             - name: Create release
               uses: actions/create-release@v1
               env:
